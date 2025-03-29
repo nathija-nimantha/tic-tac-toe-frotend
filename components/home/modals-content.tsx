@@ -80,7 +80,7 @@ export const GameHintsContent = () => (
 
         <h4>Basic Strategies:</h4>
         <ul>
-            <li><strong>Take the Center:</strong> On a 3x3 board, the center position is strategically valuable as it's part of 4 possible winning combinations</li>
+            <li><strong>Take the Center:</strong> On a 3x3 board, the center position is strategically valuable as it&#39;s part of 4 possible winning combinations</li>
             <li><strong>Go for Corners:</strong> Corners are the next best positions on a 3x3 board</li>
             <li><strong>Block Your Opponent:</strong> If your opponent has two in a row, block the third position</li>
             <li><strong>Create a Fork:</strong> Set up two possible winning moves in a single turn</li>
