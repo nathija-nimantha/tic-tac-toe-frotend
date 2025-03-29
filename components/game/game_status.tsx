@@ -69,7 +69,7 @@ export function GameStatus() {
             ) : (
                 <div className="flex flex-col items-center space-y-4">
                     {result.winner === 'draw' ? (
-                        <p className="text-xl font-bold">It&#39;s a draw! 🤝</p>
+                        <p className="text-xl font-bold">It's a draw! 🤝</p>
                     ) : (
                         <div className="flex flex-col items-center">
                             <Trophy className="mb-2 h-8 w-8 text-yellow-500" />
