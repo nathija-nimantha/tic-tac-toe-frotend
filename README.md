@@ -15,7 +15,7 @@ A modern online Tic-Tac-Toe game built with Next.js, TypeScript, Tailwind CSS, a
 
 ## Tech Stack
 
-- **Frontend**:
+- **Frontend**: [GitHub Repository](https://github.com/nathija-nimantha/tic-tac-toe-frotend)
     - Next.js 14
     - TypeScript
     - Tailwind CSS
