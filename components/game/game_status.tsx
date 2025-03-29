@@ -14,7 +14,8 @@ export function GameStatus() {
         gameId,
         gameState,
         restartRequestStatus,
-        setRestartRequestStatus
+        setRestartRequestStatus,
+        playerSymbol
     } = useGameStore();
 
     const [waitingForRestart, setWaitingForRestart] = useState(false);
@@ -63,13 +64,18 @@ export function GameStatus() {
               {turn}
             </span>
                         <ArrowRight className="h-5 w-5 text-foreground" />
-                        <span className="text-sm font-medium">Make your move</span>
+                        <span className={`text-sm font-medium ${turn === playerSymbol ? 'text-green-500' : 'text-muted-foreground'}`}>
+              {turn === playerSymbol ? "Your turn" : "Opponent&apos;s turn"}
+            </span>
+                    </div>
+                    <div className="mt-1 text-xs text-muted-foreground">
+                        You are playing as <span className={`font-bold ${playerSymbol === 'X' ? 'player-x' : 'player-o'}`}>{playerSymbol}</span>
                     </div>
                 </div>
             ) : (
                 <div className="flex flex-col items-center space-y-4">
                     {result.winner === 'draw' ? (
-                        <p className="text-xl font-bold">It's a draw! 🤝</p>
+                        <p className="text-xl font-bold">It&apos;s a draw! 🤝</p>
                     ) : (
                         <div className="flex flex-col items-center">
                             <Trophy className="mb-2 h-8 w-8 text-yellow-500" />

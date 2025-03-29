@@ -45,7 +45,10 @@ export function GameBoard() {
             socket &&
             gameId
         ) {
+            console.log(`Attempting move on cell ${index}, my symbol: ${playerSymbol}, current turn: ${turn}`);
             socket.emit("makeMove", { gameId, index });
+        } else if (turn !== playerSymbol) {
+            console.log(`Not your turn. Your symbol: ${playerSymbol}, current turn: ${turn}`);
         }
     };
 
