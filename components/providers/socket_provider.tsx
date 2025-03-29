@@ -29,7 +29,7 @@ export function SocketProvider({ children }: SocketProviderProps) {
     // Initialize socket connection
     useEffect(() => {
         // Use environment variable for the socket URL
-        const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'https://tic-tac-toe-backend-7pib.onrender.com';
+        const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3001';
         const socketInstance = io(socketUrl);
         setSocket(socketInstance);
 

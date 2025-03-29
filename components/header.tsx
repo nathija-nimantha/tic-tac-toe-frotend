@@ -28,7 +28,7 @@ export function Header() {
                 </div>
                 <div className="flex items-center space-x-4">
                     <Link
-                        href="https://github.com/yourusername/tic-tac-toe-nextjs"
+                        href="https://github.com/nathija-nimantha/tic-tac-toe-frotend"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="rounded-full p-2 hover:bg-accent/50"

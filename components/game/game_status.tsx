@@ -65,7 +65,7 @@ export function GameStatus() {
             </span>
                         <ArrowRight className="h-5 w-5 text-foreground" />
                         <span className={`text-sm font-medium ${turn === playerSymbol ? 'text-green-500' : 'text-muted-foreground'}`}>
-              {turn === playerSymbol ? "Your turn" : "Opponent&apos;s turn"}
+              {turn === playerSymbol ? "Your turn" : "Opponent's turn"}
             </span>
                     </div>
                     <div className="mt-1 text-xs text-muted-foreground">

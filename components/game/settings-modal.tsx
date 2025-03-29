@@ -2,8 +2,8 @@
 
 import { useGameStore } from "@/stores/gameStore";
 import { Button } from "@/components/ui/button";
-import { Settings, X, LogOut } from "lucide-react";
-import { useState, useEffect } from "react";
+import { Settings, X, LogOut, AlertCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface SettingsModalProps {
     isOpen: boolean;
@@ -20,26 +20,59 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
         setGameSize,
         setHostStarts,
         resetGame,
-        result
+        result,
+        board
     } = useGameStore();
 
     // Local state for the form
     const [gameSize, setLocalGameSize] = useState(currentGameSize);
     const [hostStarts, setLocalHostStarts] = useState(currentHostStarts);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [gameInProgress, setGameInProgress] = useState(false);
 
     // Sync local state with store
     useEffect(() => {
         setLocalGameSize(currentGameSize);
         setLocalHostStarts(currentHostStarts);
-    }, [currentGameSize, currentHostStarts]);
+
+        // Check if game is in progress (has moves on the board)
+        if (board) {
+            setGameInProgress(board.some(cell => cell !== null));
+        }
+    }, [currentGameSize, currentHostStarts, board]);
+
+    // Listen for settings errors
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleSettingsError = (data: { message: string }) => {
+            setErrorMessage(data.message);
+            // Reset the hostStarts option to match current game state
+            setLocalHostStarts(currentHostStarts);
+
+            // Auto-dismiss the error after 5 seconds
+            setTimeout(() => {
+                setErrorMessage("");
+            }, 5000);
+        };
+
+        socket.on("settingsError", handleSettingsError);
+
+        return () => {
+            socket.off("settingsError", handleSettingsError);
+        };
+    }, [socket, currentHostStarts]);
 
     const changeGameSettings = () => {
         if (isHost && socket && gameId) {
-            // Update local store immediately
+            // Clear any previous error
+            setErrorMessage("");
+
+            // Update local store
             setGameSize(gameSize);
             setHostStarts(hostStarts);
 
-            // Send to server - applying changes immediately, not waiting for restart
+            // Send to server
             socket.emit("changeGameSettings", {
                 gameId,
                 gameSize,
@@ -76,6 +109,13 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                     </button>
                 </div>
 
+                {errorMessage && (
+                    <div className="mb-4 p-3 rounded-md bg-destructive/10 text-destructive border border-destructive/20 flex items-start">
+                        <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0 mt-0.5" />
+                        <span className="text-sm">{errorMessage}</span>
+                    </div>
+                )}
+
                 {isHost ? (
                     <>
                         <div className="grid grid-cols-1 gap-4">
@@ -101,11 +141,17 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                                 <select
                                     value={hostStarts ? "host" : "guest"}
                                     onChange={(e) => setLocalHostStarts(e.target.value === "host")}
-                                    className="w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm"
+                                    className={`w-full rounded-md border-2 border-input bg-background px-3 py-2 text-sm ${gameInProgress ? 'opacity-60 cursor-not-allowed' : ''}`}
+                                    disabled={gameInProgress}
                                 >
                                     <option value="host">Host (You)</option>
                                     <option value="guest">Guest (Opponent)</option>
                                 </select>
+                                {gameInProgress && (
+                                    <p className="mt-1 text-xs text-amber-500">
+                                        Cannot change who plays as X during an active game
+                                    </p>
+                                )}
                             </div>
                         </div>
 
@@ -128,7 +174,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                         </div>
 
                         <p className="mt-4 text-center text-sm">
-                            {result ? "Changes will apply immediately" : "Changes apply when the game restarts"}
+                            Changes will apply immediately and restart the current game
                         </p>
                     </>
                 ) : (
