@@ -64,9 +64,7 @@ A modern online Tic-Tac-Toe game built with Next.js, TypeScript, Tailwind CSS, a
 1. Start the backend server
    ```bash
    # In the server directory
-   npm run dev
-   # or
-   yarn dev
+   node server.js
    ```
 
 2. Start the frontend development server
